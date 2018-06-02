@@ -1,0 +1,49 @@
+package com.rviannaoliveira.repository.marvel.di
+
+import com.rviannaoliveira.repository.marvel.MarvelClient.Companion.createParametersDefault
+import dagger.Module
+import dagger.Provides
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import javax.inject.Singleton
+
+
+
+
+@Module
+class NetworkModule(private val apiUrl: String) {
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addInterceptor({ chain -> createParametersDefault(chain) })
+                .build()
+    }
+
+//    @Provides
+//    @Singleton
+//    fun provideService(retrofit: Retrofit): MarvelService = retrofit.create(MarvelService::class.java)
+
+//    @Provides
+//    @Singleton
+//    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+//        return Retrofit.Builder()
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .baseUrl(apiUrl)
+//                .client(okHttpClient)
+//                .build()
+//    }
+
+    @Provides
+    @Singleton
+    fun providesInterceptor(): Interceptor {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        return interceptor
+    }
+
+}

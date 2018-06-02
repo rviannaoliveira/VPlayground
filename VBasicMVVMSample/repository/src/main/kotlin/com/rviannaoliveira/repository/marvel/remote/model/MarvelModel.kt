@@ -1,12 +1,13 @@
-package com.rviannaoliveira.repository.model
+package com.rviannaoliveira.repository.marvel.remote.model
 
 import com.google.gson.annotations.SerializedName
+import com.rviannaoliveira.repository.marvel.presentation.model.MarvelCharacter
 
 open class BaseModelMarvel {
     @SerializedName("id")
     var id: Int? = null
     @SerializedName("name")
-    var name: String? = null
+    val name: String = ""
     @SerializedName("description")
     var description: String? = null
     @SerializedName("thumbnail")
@@ -48,7 +49,7 @@ open class BaseModelMarvelWrapper {
 }
 
 data class MarvelCharacterDataContainer(
-        @SerializedName("results") var results: ArrayList<MarvelCharacter>? = null) : BaseModelMarvelContainer()
+        @SerializedName("results") var results: ArrayList<MarvelCharacterResponse>? = null) : BaseModelMarvelContainer()
 
 data class MarvelCharacterDataWrapper(@SerializedName("data")
                                       var data: MarvelCharacterDataContainer? = null) : BaseModelMarvelWrapper()
@@ -64,7 +65,7 @@ data class MarvelComicList(@SerializedName("items")
                            val items: ArrayList<MarvelComicSummary>? = null) : BaseModelMarvelList()
 
 data class MarvelComicDataContainer(@SerializedName("results")
-                                    val results: ArrayList<MarvelComic>? = null) : BaseModelMarvelContainer()
+                                    val results: ArrayList<MarvelComicResponse>? = null) : BaseModelMarvelContainer()
 
 data class MarvelComicPrice(@SerializedName("type")
                             val type: String? = null,
@@ -82,13 +83,13 @@ data class MarvelImage(
     }
 }
 
-data class MarvelSeries(@SerializedName("endYear")
-                        val endYear: Int? = null,
-                        @SerializedName("startYear")
-                        val startYear: Int? = null) : BaseModelMarvel()
+data class MarvelSeriesResponse(@SerializedName("endYear")
+                                val endYear: Int? = null,
+                                @SerializedName("startYear")
+                                val startYear: Int? = null) : BaseModelMarvel()
 
 data class MarvelSeriesContainer(@SerializedName("results")
-                                 val results: ArrayList<MarvelSeries>? = null) : BaseModelMarvelContainer()
+                                 val results: ArrayList<MarvelSeriesResponse>? = null) : BaseModelMarvelContainer()
 
 data class MarvelSeriesDataWrapper(@SerializedName("data")
                                    val data: MarvelSeriesContainer? = null) : BaseModelMarvelWrapper()
@@ -131,7 +132,7 @@ class MarvelCharacterSummary : BaseModelMarvelSummary()
 
 class MarvelSeriesSummary : BaseModelMarvelSummary()
 
-data class MarvelComic(
+data class MarvelComicResponse  constructor(
         @SerializedName("pageCount")
         val pageCount: Int? = null,
         @SerializedName("urls")
@@ -148,19 +149,24 @@ data class MarvelComic(
         val prices: ArrayList<MarvelComicPrice>? = null,
         @SerializedName("textObjects")
         val textObjects: ArrayList<MarvelTextObjects>? = null,
-        var charactersList: ArrayList<MarvelCharacter>? = null,
+        var charactersList: ArrayList<MarvelCharacterResponse>? = null,
         var storiesList: ArrayList<MarvelStory>? = null
 ) : BaseModelMarvel()
 
-class MarvelCharacter(@SerializedName("urls")
-                      val urls: ArrayList<MarvelUrl>? = null,
-                      @SerializedName("comics")
-                      var comics: MarvelComicList? = null,
-                      @SerializedName("stories")
-                      val stories: MarvelStoryList? = null,
-                      @SerializedName("series")
-                      val series: MarvelSeriesList? = null,
-                      var comicList: ArrayList<MarvelComic>? = null,
-                      var seriesList: ArrayList<MarvelSeries>? = null
+data class MarvelCharacterResponse(@SerializedName("urls")
+                                   val urls: ArrayList<MarvelUrl>? = null,
+                                   @SerializedName("comics")
+                                   var comics: MarvelComicList? = null,
+                                   @SerializedName("stories")
+                                   val stories: MarvelStoryList? = null,
+                                   @SerializedName("series")
+                                   val series: MarvelSeriesList? = null,
+                                   var comicList: ArrayList<MarvelComicResponse>? = null,
+                                   var seriesList: ArrayList<MarvelSeriesResponse>? = null
 ) : BaseModelMarvel()
 
+
+fun MarvelCharacterResponse.toMarvelCharacter() =
+        MarvelCharacter(
+                name = name,
+                image = thumbMail?.getPathExtension())

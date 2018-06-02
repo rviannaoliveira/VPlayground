@@ -1,0 +1,36 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.idea/
+/cameraview/
+/material-camera/
+.material-camera/
+./material-camera/
+*/build/*
+
+youse.keystore
+
+#Crashlytics
+com_crashlytics_export_strings.xml
+
+# Built application files
+*.apk
+*.ap_
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+
+# Log Files
+*.log

@@ -1,8 +1,8 @@
-package com.rviannaoliveira.repository.marvel.api
+package com.rviannaoliveira.repository.marvel.remote.service
 
-import com.rviannaoliveira.repository.model.MarvelCharacterDataWrapper
-import com.rviannaoliveira.repository.model.MarvelComicDataWrapper
-import com.rviannaoliveira.repository.model.MarvelSeriesDataWrapper
+import com.rviannaoliveira.repository.marvel.remote.model.MarvelCharacterDataWrapper
+import com.rviannaoliveira.repository.marvel.remote.model.MarvelComicDataWrapper
+import com.rviannaoliveira.repository.marvel.remote.model.MarvelSeriesDataWrapper
 import io.reactivex.Flowable
 import retrofit2.http.GET
 import retrofit2.http.Path
