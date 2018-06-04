@@ -25,8 +25,6 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemsViewHolder>(){
 
     override fun getItemCount(): Int =  items.size
 
-
-
     inner class ItemsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.imageItem
         val description: TextView = itemView.descriptionItem

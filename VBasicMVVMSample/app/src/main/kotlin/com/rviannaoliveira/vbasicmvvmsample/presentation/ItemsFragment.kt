@@ -23,11 +23,15 @@ class ItemsFragment : Fragment(), IView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_list, container, false)
         setHasOptionsMenu(true)
-        loadView()
         return view
     }
 
-    private fun loadView() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupView()
+    }
+
+    private fun setupView() {
         charactersAdapter = ItemsAdapter()
         recyclewView.adapter = charactersAdapter
         recyclewView.setHasFixedSize(true)

@@ -1,14 +1,16 @@
 package com.rviannaoliveira.repository.marvel.di
 
 import com.rviannaoliveira.repository.marvel.MarvelClient.Companion.createParametersDefault
+import com.rviannaoliveira.repository.marvel.remote.service.MarvelService
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-
-
 
 
 @Module
@@ -23,20 +25,20 @@ class NetworkModule(private val apiUrl: String) {
                 .build()
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideService(retrofit: Retrofit): MarvelService = retrofit.create(MarvelService::class.java)
+    @Provides
+    @Singleton
+    fun provideService(retrofit: Retrofit): MarvelService = retrofit.create(MarvelService::class.java)
 
-//    @Provides
-//    @Singleton
-//    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-//        return Retrofit.Builder()
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .baseUrl(apiUrl)
-//                .client(okHttpClient)
-//                .build()
-//    }
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(apiUrl)
+                .client(okHttpClient)
+                .build()
+    }
 
     @Provides
     @Singleton
