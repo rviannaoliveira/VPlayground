@@ -10,7 +10,7 @@ import com.rviannaoliveira.vbasicmvvmsample.R
 import com.rviannaoliveira.vbasicmvvmsample.data.repository.mapper.ItemSample
 import kotlinx.android.synthetic.main.item_row_layout.view.*
 
-class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemsViewHolder>(){
+class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ItemsViewHolder>(){
     lateinit var items : List<ItemSample>
 
     override fun onBindViewHolder(holder: ItemsViewHolder, position: Int) {

@@ -9,7 +9,7 @@ import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 
 
-interface IApiData {
+interface IMarvelApiRepository {
     fun getMarvelCharacters(offset: Int): Flowable<List<MarvelCharacterResponse>>
     fun getMarvelComics(offset: Int): Flowable<List<MarvelComicResponse>>
     fun getDetailCharacter(id: Int?): Flowable<MarvelCharacterResponse>
@@ -18,7 +18,7 @@ interface IApiData {
     fun getMarvelComicsBeginLetter(letter: String): Flowable<List<MarvelComicResponse>>
 }
 
-class MarvelApiDataImpl constructor (private var marvelService: MarvelService ) : IApiData {
+class MarvelApiRepositoryImpl constructor (private var marvelService: MarvelService) : IMarvelApiRepository {
 
     companion object {
         var comicsCache = ArrayList<MarvelComicResponse>()

@@ -1,5 +1,6 @@
 package com.rviannaoliveira.vbasicmvvmsample.presentation
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -13,13 +14,18 @@ import com.rviannaoliveira.vbasicmvvmsample.data.repository.mapper.ItemSample
 import com.rviannaoliveira.vbasicmvvmsample.domain.ItemsContract.IView
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class ItemsFragment : Fragment(), IView {
-    private lateinit var charactersAdapter : ItemsAdapter
+class HomeFragment : Fragment(), IView {
+    private lateinit var charactersAdapter : HomeAdapter
+    private lateinit var viewModel: HomeViewModel
 
     companion object {
-        fun newInstance() =  ItemsFragment()
+        fun newInstance() =  HomeFragment()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(activity!!).get(HomeViewModel::class.java)
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_list, container, false)
         setHasOptionsMenu(true)
@@ -32,7 +38,7 @@ class ItemsFragment : Fragment(), IView {
     }
 
     private fun setupView() {
-        charactersAdapter = ItemsAdapter()
+        charactersAdapter = HomeAdapter()
         recyclewView.adapter = charactersAdapter
         recyclewView.setHasFixedSize(true)
         recyclewView.layoutManager = LinearLayoutManager(activity)
