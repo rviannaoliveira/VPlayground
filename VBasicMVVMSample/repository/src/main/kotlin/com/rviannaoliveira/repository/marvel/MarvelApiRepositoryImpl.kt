@@ -1,24 +1,24 @@
 package com.rviannaoliveira.repository.marvel
 
+import com.rviannaoliveira.repository.marvel.presentation.model.MarvelCharacter
 import com.rviannaoliveira.repository.marvel.remote.model.*
 import com.rviannaoliveira.repository.marvel.remote.service.MarvelService
-import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
 interface IMarvelApiRepository {
-    fun getMarvelCharacters(offset: Int): Flowable<List<MarvelCharacterResponse>>
-    fun getMarvelComics(offset: Int): Flowable<List<MarvelComicResponse>>
-    fun getDetailCharacter(id: Int?): Flowable<MarvelCharacterResponse>
-    fun getDetailComic(id: Int?): Flowable<MarvelComicResponse>
-    fun getMarvelCharactersBeginLetter(letter: String): Flowable<List<MarvelCharacterResponse>>
-    fun getMarvelComicsBeginLetter(letter: String): Flowable<List<MarvelComicResponse>>
+    fun getMarvelCharacters(offset: Int): Single<List<MarvelCharacter>>
+    fun getMarvelComics(offset: Int): Single<List<MarvelComicResponse>>
+    fun getDetailCharacter(id: Int?): Single<MarvelCharacterResponse>
+    fun getDetailComic(id: Int?): Single<MarvelComicResponse>
 }
 
-class MarvelApiRepositoryImpl constructor (private var marvelService: MarvelService) : IMarvelApiRepository {
+class MarvelApiRepositoryImpl @Inject constructor (private var marvelService: MarvelService) : IMarvelApiRepository {
 
     companion object {
         var comicsCache = ArrayList<MarvelComicResponse>()
@@ -28,66 +28,43 @@ class MarvelApiRepositoryImpl constructor (private var marvelService: MarvelServ
     }
 
 
-    override fun getMarvelCharacters(offset: Int): Flowable<List<MarvelCharacterResponse>> {
+    override fun getMarvelCharacters(offset: Int): Single<List<MarvelCharacter>> {
         val response = marvelService.getCharacters(LIMIT_REGISTER, offset)
         return response
                 .subscribeOn(Schedulers.newThread())
                 .retry(1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .concatMap({ dataWrappers ->
-                    val results = dataWrappers.data?.results
-                    Flowable.fromArray(results)
+                .flatMap({ dataWrappers ->
+                    Single.just(dataWrappers.data.results.map { it.toMarvelCharacter() })
                 })
     }
 
-    override fun getMarvelCharactersBeginLetter(letter: String): Flowable<List<MarvelCharacterResponse>> {
-        val response = marvelService.getCharactersBeginLetter(100, letter)
-        return response.subscribeOn(Schedulers.newThread())
-                .retry(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .concatMap({ dataWrappers ->
-                    val results = dataWrappers.data?.results
-                    Flowable.fromArray(results)
-                })
-    }
-
-    override fun getMarvelComicsBeginLetter(letter: String): Flowable<List<MarvelComicResponse>> {
-        val response = marvelService.getComicsBeginLetter(100, letter)
-        return response.subscribeOn(Schedulers.newThread())
-                .retry(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .concatMap({ dataWrappers ->
-                    val results = dataWrappers.data?.results
-                    Flowable.fromArray(results)
-                })
-    }
-
-    override fun getMarvelComics(offset: Int): Flowable<List<MarvelComicResponse>> {
+    override fun getMarvelComics(offset: Int): Single<List<MarvelComicResponse>> {
         if (offset == 0 && comicsCache.isNotEmpty()) {
-            return Flowable.fromArray(comicsCache)
+            return Single.just(comicsCache)
         }
 
         val response = marvelService.getComics(LIMIT_REGISTER, offset)
         return response.subscribeOn(Schedulers.newThread())
                 .retry(1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .concatMap({ dataWrappers ->
+                .flatMap({ dataWrappers ->
                     val results = dataWrappers.data?.results
                     results?.let { comicsCache.addAll(it) }
-                    Flowable.fromArray(dataWrappers.data?.results)
+                    Single.just(dataWrappers.data?.results)
                 })
     }
 
-    override fun getDetailCharacter(id: Int?): Flowable<MarvelCharacterResponse> {
+    override fun getDetailCharacter(id: Int?): Single<MarvelCharacterResponse> {
         val response = marvelService.getCharacter(id)
         return response.subscribeOn(Schedulers.newThread())
                 .retry(1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .concatMap({ dataWrappers ->
-                    Flowable.just(dataWrappers.data?.results?.get(0))
+                .flatMap({ dataWrappers ->
+                    Single.just(dataWrappers.data?.results?.get(0))
                 })
                 .flatMap({ data ->
-                    Flowable.zip(Flowable.just(data),
+                    Single.zip(Single.just(data),
                             getMarvelCharacterComics(data),
                             getMarvelCharacterSeries(data),
                             Function3<MarvelCharacterResponse?, MarvelComicDataWrapper, MarvelSeriesDataWrapper, MarvelCharacterResponse>({ character, comics, series ->
@@ -99,16 +76,16 @@ class MarvelApiRepositoryImpl constructor (private var marvelService: MarvelServ
                 })
     }
 
-    override fun getDetailComic(id: Int?): Flowable<MarvelComicResponse> {
+    override fun getDetailComic(id: Int?): Single<MarvelComicResponse> {
         val response = marvelService.getComic(id)
         return response.subscribeOn(Schedulers.newThread())
                 .retry(1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .concatMap({ dataWrappers ->
-                    Flowable.just(dataWrappers.data?.results?.get(0))
+                .flatMap ({ dataWrappers ->
+                    Single.just(dataWrappers.data?.results?.get(0))
                 })
                 .flatMap({ data ->
-                    Flowable.zip(Flowable.just(data),
+                    Single.zip(Single.just(data),
                             getMarvelComicCharacter(data),
                             BiFunction<MarvelComicResponse?, MarvelCharacterDataWrapper, MarvelComicResponse>({ comic, characters ->
                                 comic.charactersList = characters.data?.results
@@ -118,7 +95,7 @@ class MarvelApiRepositoryImpl constructor (private var marvelService: MarvelServ
                 })
     }
 
-    private fun getMarvelCharacterComics(data: MarvelCharacterResponse?): Flowable<MarvelComicDataWrapper>? {
+    private fun getMarvelCharacterComics(data: MarvelCharacterResponse?): Single<MarvelComicDataWrapper>? {
         return data?.comics?.collectionURI?.let {
             marvelService.getGenericComic(it)
                     .subscribeOn(Schedulers.newThread())
@@ -126,7 +103,7 @@ class MarvelApiRepositoryImpl constructor (private var marvelService: MarvelServ
         }
     }
 
-    private fun getMarvelCharacterSeries(data: MarvelCharacterResponse?): Flowable<MarvelSeriesDataWrapper>? {
+    private fun getMarvelCharacterSeries(data: MarvelCharacterResponse?): Single<MarvelSeriesDataWrapper>? {
         return data?.series?.collectionURI?.let {
             marvelService.getGenericSeries(it)
                     .subscribeOn(Schedulers.newThread())
@@ -134,7 +111,7 @@ class MarvelApiRepositoryImpl constructor (private var marvelService: MarvelServ
         }
     }
 
-    private fun getMarvelComicCharacter(data: MarvelComicResponse?): Flowable<MarvelCharacterDataWrapper>? {
+    private fun getMarvelComicCharacter(data: MarvelComicResponse?): Single<MarvelCharacterDataWrapper>? {
         return data?.characters?.collectionURI?.let {
             marvelService.getGenericCharacter(it)
                     .subscribeOn(Schedulers.newThread())

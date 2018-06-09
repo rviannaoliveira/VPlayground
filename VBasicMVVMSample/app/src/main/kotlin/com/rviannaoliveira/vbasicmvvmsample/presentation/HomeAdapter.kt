@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.rviannaoliveira.repository.marvel.presentation.model.MarvelCharacter
 import com.rviannaoliveira.vbasicmvvmsample.R
-import com.rviannaoliveira.vbasicmvvmsample.data.repository.mapper.ItemSample
 import kotlinx.android.synthetic.main.item_row_layout.view.*
 
 class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ItemsViewHolder>(){
-    lateinit var items : List<ItemSample>
+    private val items = mutableListOf<MarvelCharacter>()
 
     override fun onBindViewHolder(holder: ItemsViewHolder, position: Int) {
         val item = items[position]
@@ -21,6 +21,12 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ItemsViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
         return ItemsViewHolder(view)
+    }
+
+    fun loadMarvelCharacters(items : List<MarvelCharacter>){
+        this.items.clear()
+        this.items.addAll(items)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int =  items.size

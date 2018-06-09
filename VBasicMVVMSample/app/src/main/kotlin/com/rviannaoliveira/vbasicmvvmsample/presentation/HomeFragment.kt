@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import com.rviannaoliveira.core.hide
 import com.rviannaoliveira.core.show
 import com.rviannaoliveira.vbasicmvvmsample.R
-import com.rviannaoliveira.vbasicmvvmsample.data.repository.mapper.ItemSample
-import com.rviannaoliveira.vbasicmvvmsample.domain.ItemsContract.IView
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class HomeFragment : Fragment(), IView {
-    private lateinit var charactersAdapter : HomeAdapter
+class HomeFragment : Fragment() {
+    private lateinit var adapter : HomeAdapter
     private lateinit var viewModel: HomeViewModel
+    private val disposable : CompositeDisposable = CompositeDisposable()
 
     companion object {
         fun newInstance() =  HomeFragment()
@@ -35,20 +35,33 @@ class HomeFragment : Fragment(), IView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+        disposable.add(viewModel.getViewState().subscribe { handler(it) })
+        viewModel.loadCharacters()
+    }
+
+    private fun handler(state: HomeViewState) {
+        if(state.isLoading){
+            showProgressBar()
+        }else{
+            hideProgressBar()
+        }
+
+        adapter.loadMarvelCharacters(state.list)
     }
 
     private fun setupView() {
-        charactersAdapter = HomeAdapter()
-        recyclewView.adapter = charactersAdapter
+        adapter = HomeAdapter()
+        recyclewView.adapter = adapter
         recyclewView.setHasFixedSize(true)
         recyclewView.layoutManager = LinearLayoutManager(activity)
     }
 
-    override fun loadItems(items: List<ItemSample>) {
+    private fun showProgressBar() = progressbar.show()
+
+    private fun hideProgressBar() = progressbar.hide()
+
+    override fun onDestroy() {
+        disposable.clear()
+        super.onDestroy()
     }
-
-    override fun showProgressBar() = progressbar.show()
-
-    override fun hideProgressBar() = progressbar.hide()
-
 }

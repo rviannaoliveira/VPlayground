@@ -49,10 +49,10 @@ open class BaseModelMarvelWrapper {
 }
 
 data class MarvelCharacterDataContainer(
-        @SerializedName("results") var results: ArrayList<MarvelCharacterResponse>? = null) : BaseModelMarvelContainer()
+        @SerializedName("results") var results: ArrayList<MarvelCharacterResponse>) : BaseModelMarvelContainer()
 
 data class MarvelCharacterDataWrapper(@SerializedName("data")
-                                      var data: MarvelCharacterDataContainer? = null) : BaseModelMarvelWrapper()
+                                      var data: MarvelCharacterDataContainer) : BaseModelMarvelWrapper()
 
 data class MarvelCharacterList(@SerializedName("items")
                                val items: ArrayList<MarvelCharacterSummary>? = null) : BaseModelMarvelList()
