@@ -3,12 +3,20 @@ package com.rviannaoliveira.vbasicmvvmsample.presentation
 import android.arch.lifecycle.ViewModel
 import com.rviannaoliveira.repository.marvel.IMarvelApiRepository
 import com.rviannaoliveira.repository.marvel.presentation.model.MarvelCharacter
+import com.rviannaoliveira.vbasicmvvmsample.di.AppInjector
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(private val repository: IMarvelApiRepository) : ViewModel(){
+class HomeViewModel : ViewModel(){
+
+    @Inject
+    lateinit var repository: IMarvelApiRepository
+
+    init {
+        AppInjector.component.inject(this)
+    }
     private val disposable : CompositeDisposable = CompositeDisposable()
 
     private val stateObservable : BehaviorSubject<HomeViewState> by lazy { BehaviorSubject.create<HomeViewState>() }

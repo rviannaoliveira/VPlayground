@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import com.rviannaoliveira.core.hide
 import com.rviannaoliveira.core.show
 import com.rviannaoliveira.vbasicmvvmsample.R
+import com.rviannaoliveira.vbasicmvvmsample.di.AppInjector
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_list.*
+
+
+
 
 class HomeFragment : Fragment() {
     private lateinit var adapter : HomeAdapter

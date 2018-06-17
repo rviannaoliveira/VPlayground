@@ -1,6 +1,8 @@
 package com.rviannaoliveira.repository.marvel.di
 
-import com.rviannaoliveira.repository.marvel.MarvelClient.Companion.createParametersDefault
+import com.rviannaoliveira.repository.marvel.IMarvelApiRepository
+import com.rviannaoliveira.repository.marvel.MarvelApiRepositoryImpl
+import com.rviannaoliveira.repository.marvel.MarvelClient
 import com.rviannaoliveira.repository.marvel.remote.service.MarvelService
 import dagger.Module
 import dagger.Provides
@@ -15,15 +17,6 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule(private val apiUrl: String) {
-
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .addInterceptor({ chain -> createParametersDefault(chain) })
-                .build()
-    }
 
     @Provides
     @Singleton
@@ -42,10 +35,24 @@ class NetworkModule(private val apiUrl: String) {
 
     @Provides
     @Singleton
+    fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addInterceptor({ chain -> MarvelClient.createParametersDefault(chain) })
+                .build()
+    }
+
+    @Provides
+    @Singleton
     fun providesInterceptor(): Interceptor {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return interceptor
     }
+
+    @Provides
+    @Singleton
+    fun provideRepository(marvelApiRepositoryImpl: MarvelApiRepositoryImpl) : IMarvelApiRepository
+            = marvelApiRepositoryImpl
 
 }
