@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">VFormMVVM</string>
+    <string name="email">E-mail</string>
+    <string name="invalid_email">This email is invalid</string>
+    <string name="submit">Submit</string>
+    <string name="invalid_form">Oops, the form seems to be incorrect</string>
+    <string name="password">Password</string>
+    <string name="invalid_password">The password should have at least 8 characters</string>
+    <string name="success">Success</string>
+    <string name="error">Oops, Error</string>
+    <string name="error_required">This field is required</string>
+    <string name="ok">OK</string>
+</resources>
