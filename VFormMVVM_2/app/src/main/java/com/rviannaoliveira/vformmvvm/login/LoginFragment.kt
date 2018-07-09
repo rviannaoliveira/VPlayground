@@ -63,7 +63,6 @@ class LoginFragment : Fragment(), LoginView {
                 }
                 loginViewState.emailErrorMessage.isNotEmpty() -> inputLayoutEmail.error = loginViewState.emailErrorMessage
                 loginViewState.passwordErrorMessage.isNotEmpty() -> inputLayoutPassword.error = loginViewState.passwordErrorMessage
-                loginViewState.isFormError -> Snackbar.make(view!!, getString(R.string.invalid_form), Snackbar.LENGTH_LONG).show()
                 loginViewState.isError -> Snackbar.make(view!!, getString(R.string.error), Snackbar.LENGTH_LONG).show()
             }
         })

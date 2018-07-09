@@ -8,7 +8,6 @@ data class LoginInfo(
 data class LoginViewState(
         val emailErrorMessage: String = "",
         val passwordErrorMessage: String = "",
-        val isFormError : Boolean = false,
         val isError: Boolean = false,
         val isUserLogged : Boolean = false,
         val enableSubmit : Boolean = false
