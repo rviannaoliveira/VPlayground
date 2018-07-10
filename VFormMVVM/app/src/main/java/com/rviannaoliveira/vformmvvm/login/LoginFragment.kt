@@ -31,6 +31,7 @@ class LoginFragment :Fragment() {
         val loginViewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)
         dataBinding.viewModel = loginViewModel
         setupUI(loginViewModel)
+
         return dataBinding.root
     }
 

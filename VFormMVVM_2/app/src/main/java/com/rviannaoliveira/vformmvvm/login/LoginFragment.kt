@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.rviannaoliveira.vformmvvm.R
+import com.rviannaoliveira.vformmvvm.R.id.*
 import com.rviannaoliveira.vformmvvm.model.LoginInfo
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,10 +42,10 @@ class LoginFragment : Fragment(), LoginView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val factory = LoginViewModel.Factory(context!!)
+        val factory = LoginViewModel.Factory()
         val loginViewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)
 
-        loginViewModel.bindView(this)
+        loginViewModel.bindView(this, LoginValidator(requireContext()))
         init(loginViewModel)
     }
 

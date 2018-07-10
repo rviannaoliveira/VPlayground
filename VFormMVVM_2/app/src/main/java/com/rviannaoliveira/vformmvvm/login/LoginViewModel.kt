@@ -10,8 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
-class LoginViewModel(private val repository: LoginRepository,
-                     private val formValidator: LoginValidator) : ViewModel() {
+class LoginViewModel(private val repository: LoginRepository) : ViewModel() {
 
     private val viewState: BehaviorSubject<LoginViewState> = BehaviorSubject.create()
     private val disposable = CompositeDisposable()
@@ -19,7 +18,7 @@ class LoginViewModel(private val repository: LoginRepository,
     fun expectedResult(): Observable<LoginViewState> =
             viewState.serialize()
 
-    fun bindView(loginView: LoginView) {
+    fun bindView(loginView: LoginView, formValidator: LoginValidator) {
         disposable.add(loginView.startLogin().subscribe {
             authenticateUser(it)
         })
@@ -55,9 +54,9 @@ class LoginViewModel(private val repository: LoginRepository,
         super.onCleared()
     }
 
-    class Factory(private val context: Context) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return LoginViewModel(LoginRepository(), LoginValidator(context)) as T
+            return LoginViewModel(LoginRepository()) as T
         }
     }
 }
