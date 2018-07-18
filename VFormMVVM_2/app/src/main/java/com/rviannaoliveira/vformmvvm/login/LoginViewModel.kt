@@ -2,56 +2,69 @@ package com.rviannaoliveira.vformmvvm.login
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Context
 import com.rviannaoliveira.vformmvvm.model.LoginInfo
 import com.rviannaoliveira.vformmvvm.model.LoginViewState
 import com.rviannaoliveira.vformmvvm.model.User
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class LoginViewModel(private val repository: LoginRepository) : ViewModel() {
 
     private val viewState: BehaviorSubject<LoginViewState> = BehaviorSubject.create()
-    private val disposable = CompositeDisposable()
+    private val disposableView = CompositeDisposable()
+    private var loginViewState = LoginViewState()
 
     fun expectedResult(): Observable<LoginViewState> =
             viewState.serialize()
 
-    fun bindView(loginView: LoginView, formValidator: LoginValidator) {
-        disposable.add(loginView.startLogin().subscribe {
-            authenticateUser(it)
-        })
-        disposable.add(loginView.emailFilled().subscribe {
+    fun bindView(loginView: ILoginView, formValidator: LoginValidator) {
+        disposableView.add(loginView
+                .startLogin()
+                .subscribe {
+                    loginViewState = loginViewState.copy(showProgress = true)
+                    viewState.onNext(loginViewState)
+                    authenticateUser(it)
+                })
+
+        disposableView.add(loginView.emailFilled().subscribe {
             val emailValid = formValidator.isEmailValid(it)
-            viewState.onNext(LoginViewState(emailErrorMessage = emailValid))
+            loginViewState = loginViewState.copy(emailErrorMessage = emailValid)
+            viewState.onNext(loginViewState)
             formValidator.emailValidSubject.onNext(emailValid.isEmpty())
         })
-        disposable.add(loginView.passwordFilled().subscribe {
+        disposableView.add(loginView.passwordFilled().subscribe {
             val passwordValid = formValidator.isPasswordValid(it)
-            viewState.onNext(LoginViewState(passwordErrorMessage = passwordValid))
+            loginViewState = loginViewState.copy(passwordErrorMessage = passwordValid)
+            viewState.onNext(loginViewState)
             formValidator.passwordValidSubject.onNext(passwordValid.isEmpty())
         })
 
-        disposable.add(formValidator.isValid().subscribe {
-            viewState.onNext(LoginViewState(enableSubmit = it))
+        disposableView.add(formValidator.isValid().subscribe {
+            loginViewState = loginViewState.copy(enableSubmit = it)
+            viewState.onNext(loginViewState)
         })
     }
 
     private fun authenticateUser(loginInfo: LoginInfo) {
         val loginCredential = User(loginInfo.email, loginInfo.password)
-        val loginResponse = repository.login(loginCredential)
 
-        if (loginResponse) {
-            viewState.onNext(LoginViewState(isUserLogged = true))
-        } else {
-            viewState.onNext(LoginViewState(isError = true))
-        }
+        repository.login(loginCredential)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    loginViewState = loginViewState.copy(isUserLogged = true, showProgress = false)
+                    viewState.onNext(loginViewState)
+                }, {
+                    loginViewState = loginViewState.copy(isError = true, showProgress = false)
+                    viewState.onNext(loginViewState)
+                })
     }
 
-    override fun onCleared() {
-        disposable.clear()
-        super.onCleared()
+    fun unbindView() {
+        disposableView.clear()
     }
 
     class Factory : ViewModelProvider.Factory {

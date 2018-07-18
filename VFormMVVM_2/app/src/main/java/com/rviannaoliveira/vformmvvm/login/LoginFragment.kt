@@ -21,20 +21,15 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
 
 
-interface LoginView {
+interface ILoginView {
     fun startLogin(): Observable<LoginInfo>
     fun emailFilled(): Observable<String>
     fun passwordFilled(): Observable<String>
 }
 
-class LoginFragment : Fragment(), LoginView {
+class LoginFragment : Fragment(), ILoginView {
     private lateinit var viewModel: LoginViewModel
     private val disposable = CompositeDisposable()
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
@@ -43,30 +38,43 @@ class LoginFragment : Fragment(), LoginView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val factory = LoginViewModel.Factory()
-        val loginViewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)
-
-        loginViewModel.bindView(this, LoginValidator(requireContext()))
-        init(loginViewModel)
+        viewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)
+        viewModel.bindView(this, LoginValidator(requireContext()))
     }
 
+    override fun onResume() {
+        super.onResume()
+        init()
+    }
 
-    private fun init(loginViewModel: LoginViewModel) {
-        disposable.add(loginViewModel.expectedResult().subscribe { loginViewState ->
-            inputLayoutEmail.error = null
-            inputLayoutPassword.error = null
-            submit.isEnabled = loginViewState.enableSubmit
-            hideKeyboard()
+    override fun onPause() {
+        disposable.clear()
+        super.onPause()
+    }
 
-            when {
-                loginViewState.isUserLogged -> {
+    override fun onDestroyView() {
+        viewModel.unbindView()
+        super.onDestroyView()
+    }
+
+    private fun init() {
+        disposable.add(viewModel.expectedResult()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { loginViewState ->
                     hideKeyboard()
-                    Snackbar.make(view!!, R.string.success, Snackbar.LENGTH_LONG).show()
-                }
-                loginViewState.emailErrorMessage.isNotEmpty() -> inputLayoutEmail.error = loginViewState.emailErrorMessage
-                loginViewState.passwordErrorMessage.isNotEmpty() -> inputLayoutPassword.error = loginViewState.passwordErrorMessage
-                loginViewState.isError -> Snackbar.make(view!!, getString(R.string.error), Snackbar.LENGTH_LONG).show()
-            }
-        })
+                    submit.isEnabled = loginViewState.enableSubmit
+                    inputLayoutEmail.error = if(loginViewState.emailErrorMessage.isNotEmpty()) loginViewState.emailErrorMessage else null
+                    inputLayoutPassword.error = if(loginViewState.passwordErrorMessage.isNotEmpty()) loginViewState.passwordErrorMessage else null
+                    progressBar.visibility =  if(loginViewState.showProgress) View.VISIBLE else View.GONE
+
+                    when {
+                        loginViewState.isUserLogged -> {
+                            hideKeyboard()
+                            Snackbar.make(view!!, R.string.success, Snackbar.LENGTH_LONG).show()
+                        }
+                        loginViewState.isError -> Snackbar.make(view!!, getString(R.string.error), Snackbar.LENGTH_LONG).show()
+                    }
+                })
 
     }
 
@@ -97,11 +105,6 @@ class LoginFragment : Fragment(), LoginView {
             .observeOn(AndroidSchedulers.mainThread())
             .map { text -> text.toString() }
             .filter { text -> text.isNotEmpty() }
-
-    override fun onDestroy() {
-        disposable.clear()
-        super.onDestroy()
-    }
 
     companion object {
         fun newInstance() = LoginFragment()

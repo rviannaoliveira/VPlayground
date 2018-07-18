@@ -9,6 +9,7 @@ data class LoginViewState(
         val emailErrorMessage: String = "",
         val passwordErrorMessage: String = "",
         val isError: Boolean = false,
+        val showProgress : Boolean =  false,
         val isUserLogged : Boolean = false,
         val enableSubmit : Boolean = false
 )

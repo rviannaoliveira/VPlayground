@@ -7,7 +7,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
 
-class LoginValidator(private val context: Context) {
+class LoginValidator    (private val context: Context) {
     val emailValidSubject: PublishSubject<Boolean> = PublishSubject.create()
     val passwordValidSubject: PublishSubject<Boolean> = PublishSubject.create()
 
