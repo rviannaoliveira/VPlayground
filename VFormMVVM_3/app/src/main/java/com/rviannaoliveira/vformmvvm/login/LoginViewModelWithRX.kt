@@ -10,16 +10,14 @@ import com.rviannaoliveira.vformmvvm.model.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-class LoginViewModel(private val repository: LoginRepository,
-                     private val loginValidator: LoginValidator) : ViewModel() {
+class LoginViewModelWithRX(private val repository: LoginRepository,
+                           private val loginValidator: LoginValidator) : ViewModel() {
 
     private var loginViewState = LoginViewState()
     private val disposable = CompositeDisposable()
     val emailValidator = loginValidator.emailError
     val passwordValidator = loginValidator.passwordError
     val enableButton = loginValidator.enableButton
-    val emailObserver = MutableLiveData<LoginViewState>()
-    val passwordObserver = MutableLiveData<LoginViewState>()
     lateinit var submitObserver : MutableLiveData<LoginViewState>
 
     fun authenticateUser(loginInfo: LoginInfo) {
@@ -59,8 +57,7 @@ class LoginViewModel(private val repository: LoginRepository,
 
     class Factory(private val requireContext: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return LoginViewModel(LoginRepository(),LoginValidator(requireContext)) as T
+            return LoginViewModelWithRX(LoginRepository(),LoginValidator(requireContext)) as T
         }
     }
 }
-

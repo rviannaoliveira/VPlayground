@@ -1,4 +1,4 @@
-package com.rviannaoliveira.vformmvvm
+package com.rviannaoliveira.vformmvvm.core
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.LiveDataReactiveStreams

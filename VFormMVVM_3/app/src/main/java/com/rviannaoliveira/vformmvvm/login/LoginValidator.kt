@@ -26,7 +26,7 @@ class LoginValidator(private val context: Context) {
     fun isPasswordValid(loginViewState: LoginViewState) {
         var text = ""
 
-        if (loginViewState.password.isNullOrBlank()) {
+        if (loginViewState.password.isBlank()) {
             text = context.getString(R.string.error_required)
         }
         if (loginViewState.password.length < 8) {
@@ -41,10 +41,10 @@ class LoginValidator(private val context: Context) {
     fun isEmailValid(loginViewState: LoginViewState) {
         var text = ""
 
-        if (loginViewState.email.isNullOrBlank()) {
+        if (loginViewState.email.isBlank()) {
             text = context.getString(R.string.error_required)
         }
-        if (!loginViewState.email.contains("@")) {
+        if ("@" !in loginViewState.email) {
             text = context.getString(R.string.invalid_email)
         }
 

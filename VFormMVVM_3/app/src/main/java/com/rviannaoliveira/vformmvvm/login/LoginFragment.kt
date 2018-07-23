@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
 
 class LoginFragment : Fragment() {
-    private lateinit var viewModel: LoginViewModel
+    private lateinit var viewModel: LoginViewModelWithLiveData
     private val disposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,18 +30,12 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val factory = LoginViewModel.Factory(requireContext())
-        viewModel = ViewModelProviders.of(this, factory).get(LoginViewModel::class.java)
+        val factory = LoginViewModelWithLiveData.Factory(requireContext())
+        viewModel = ViewModelProviders.of(this, factory).get(LoginViewModelWithLiveData::class.java)
         setupUI()
     }
 
     private fun setupUI() {
-        viewModel.emailObserver.observe(this, Observer<LoginViewState> { state ->
-            inputEmail.setText(state?.email)
-        })
-        viewModel.passwordObserver.observe(this, Observer<LoginViewState> { state ->
-            inputPassword.setText(state?.password)
-        })
         viewModel.emailValidator.observe(this, Observer<LoginViewState> { state ->
             inputLayoutEmail.error = if (state?.emailErrorMessage!!.isNotEmpty()) state.emailErrorMessage else null
         })
@@ -52,13 +46,14 @@ class LoginFragment : Fragment() {
             submit.isEnabled = state?.enableSubmit ?: false
         })
         viewModel.submitObserver.observe(this,Observer<LoginViewState> { state ->
-            progressBar.visibility = if(state?.showProgress == true) View.VISIBLE else View.GONE
+            progressBar.visibility = if(state!!.showProgress == true) View.VISIBLE else View.GONE
 
-            if(state?.isUserLogged == true){
-                hideKeyboard()
-                Snackbar.make(view!!, R.string.success, Snackbar.LENGTH_LONG).show()
-            }else{
-                Snackbar.make(view!!, getString(R.string.error), Snackbar.LENGTH_LONG).show()
+            when{
+                state.isUserLogged-> {
+                    hideKeyboard()
+                    Snackbar.make(view!!, R.string.success, Snackbar.LENGTH_LONG).show()
+                }
+                state.isError -> Snackbar.make(view!!, getString(R.string.error), Snackbar.LENGTH_LONG).show()
             }
         })
     }

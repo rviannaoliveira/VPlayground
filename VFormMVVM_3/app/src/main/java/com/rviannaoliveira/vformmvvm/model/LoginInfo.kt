@@ -1,9 +1,12 @@
 package com.rviannaoliveira.vformmvvm.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class LoginInfo(
         val email: String,
-        val password: String
-)
+        val password: String) : Parcelable
 
 data class LoginViewState(
         val email: String = "",
