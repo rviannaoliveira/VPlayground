@@ -1,4 +1,4 @@
-package com.rviannaoliveira.vformmvvm
+package com.rviannaoliveira.vformmvvm.core
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
