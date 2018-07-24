@@ -5,6 +5,7 @@ import android.content.Context
 import com.rviannaoliveira.vformmvvm.R
 import com.rviannaoliveira.vformmvvm.model.LoginViewState
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
@@ -12,52 +13,49 @@ import io.reactivex.subjects.PublishSubject
 class LoginValidator(private val context: Context) {
     val emailError = MutableLiveData<LoginViewState>()
     val passwordError = MutableLiveData<LoginViewState>()
-    val enableButton = MutableLiveData<LoginViewState>()
-    private val emailValidSubject: PublishSubject<LoginViewState> = PublishSubject.create()
-    private val passwordValidSubject: PublishSubject<LoginViewState> = PublishSubject.create()
+    val enableButton = MutableLiveData<Boolean>()
+    private val emailValidSubject: PublishSubject<Boolean> = PublishSubject.create()
+    private val passwordValidSubject: PublishSubject<Boolean> = PublishSubject.create()
+    private val disposable = CompositeDisposable()
 
     init {
-        isValid().subscribe {
+        disposable.add(isValid().subscribe {
             enableButton.value = it
-        }
+        })
     }
 
 
     fun isPasswordValid(loginViewState: LoginViewState) {
         var text = ""
 
-        if (loginViewState.password.isBlank()) {
-            text = context.getString(R.string.error_required)
-        }
         if (loginViewState.password.length < 8) {
             text = context.getString(R.string.invalid_password)
         }
 
         val loginViewStateCopy = loginViewState.copy(passwordErrorMessage = text)
         passwordError.value = loginViewStateCopy
-        passwordValidSubject.onNext(loginViewStateCopy)
+        passwordValidSubject.onNext(loginViewStateCopy.passwordErrorMessage.isEmpty())
     }
 
     fun isEmailValid(loginViewState: LoginViewState) {
         var text = ""
 
-        if (loginViewState.email.isBlank()) {
-            text = context.getString(R.string.error_required)
-        }
         if ("@" !in loginViewState.email) {
             text = context.getString(R.string.invalid_email)
         }
 
         val loginViewStateCopy = loginViewState.copy(emailErrorMessage = text)
         emailError.value = loginViewStateCopy
-        emailValidSubject.onNext(loginViewStateCopy)
+        emailValidSubject.onNext(loginViewStateCopy.emailErrorMessage.isEmpty())
     }
 
-    private fun isValid(): Observable<LoginViewState> = Observable.combineLatest(
+    fun disposable() = disposable.clear()
+
+    private fun isValid(): Observable<Boolean> = Observable.combineLatest(
             emailValidSubject,
             passwordValidSubject,
-            BiFunction { emailState: LoginViewState, passwordState: LoginViewState ->
-                LoginViewState(enableSubmit = emailState.emailErrorMessage.isEmpty() && passwordState.passwordErrorMessage.isEmpty())
+            BiFunction { emailState: Boolean, passwordState: Boolean ->
+                emailState && passwordState
             })
 
 }

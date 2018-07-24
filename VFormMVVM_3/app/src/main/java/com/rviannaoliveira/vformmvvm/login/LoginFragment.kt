@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.rviannaoliveira.vformmvvm.R
-import com.rviannaoliveira.vformmvvm.model.LoginInfo
 import com.rviannaoliveira.vformmvvm.model.LoginViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -42,19 +41,18 @@ class LoginFragment : Fragment() {
         viewModel.passwordValidator.observe(this, Observer<LoginViewState> { state ->
             inputLayoutPassword.error = if (state?.passwordErrorMessage!!.isNotEmpty()) state.passwordErrorMessage else null
         })
-        viewModel.enableButton.observe(this,Observer<LoginViewState>{ state ->
-            submit.isEnabled = state?.enableSubmit ?: false
+        viewModel.enableButton.observe(this, Observer<Boolean> {
+            submit.isEnabled = it!!
         })
-        viewModel.submitObserver.observe(this,Observer<LoginViewState> { state ->
-            progressBar.visibility = if(state!!.showProgress == true) View.VISIBLE else View.GONE
-
-            when{
-                state.isUserLogged-> {
-                    hideKeyboard()
-                    Snackbar.make(view!!, R.string.success, Snackbar.LENGTH_LONG).show()
-                }
-                state.isError -> Snackbar.make(view!!, getString(R.string.error), Snackbar.LENGTH_LONG).show()
-            }
+        viewModel.successObserver.observe(this, Observer<Unit> {
+            hideKeyboard()
+            Snackbar.make(view!!, R.string.success, Snackbar.LENGTH_LONG).show()
+        })
+        viewModel.loadingObserver.observe(this, Observer<Boolean> {
+            progressBar.visibility = if (it!!) View.VISIBLE else View.GONE
+        })
+        viewModel.errorObserver.observe(this, Observer<String> { it ->
+            Snackbar.make(view!!, it!!, Snackbar.LENGTH_LONG).show()
         })
     }
 
@@ -84,12 +82,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun startLogin() = submit.clicks()
-            .map {
-                LoginInfo(
-                        email = inputEmail.text.toString(),
-                        password = inputPassword.text.toString())
-            }.subscribe {
-                viewModel.authenticateUser(it)
+            .subscribe {
+                viewModel.authenticateUser()
             }
 
 

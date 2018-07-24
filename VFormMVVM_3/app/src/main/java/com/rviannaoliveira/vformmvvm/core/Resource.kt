@@ -13,8 +13,8 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
             return Resource(SUCCESS, data, null)
         }
 
-        fun <T> error(msg: String, data: T?): Resource<T> {
-            return Resource(ERROR, data, msg)
+        fun <T> error(data: T? = null): Resource<T> {
+            return Resource(ERROR, data, "No Network")
         }
 
         fun <T> loading(data: T?): Resource<T> {
@@ -35,10 +35,5 @@ enum class Status {
     SUCCESS,
     LOADING,
     ERROR,
-    NO_NETWORK,
-    EMPTY_FIRST_NAME,
-    EMPTY_LAST_NAME,
-    EMPTY_CITY,
-    INVALID_URI
 }
 

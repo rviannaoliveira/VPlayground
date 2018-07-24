@@ -10,20 +10,8 @@ import java.util.concurrent.TimeUnit
 
 
 class LoginRepository {
-    fun loginWithLiveData(user: User): LiveData<Resource<Boolean>> {
-        return ApiLiveData(user)
-    }
-    fun login(user: User): Observable<Boolean> {
-        return Observable
-                .timer(5, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .map {
-                    print(">>>>$user")
-                    true
-                }
-    }
+    fun loginWithLiveData(user: User): LiveData<Resource<Boolean>> = ApiLiveData(user)
 }
-
 
 class ApiLiveData(private val user: User) : LiveData<Resource<Boolean>>() {
     var disposable: Disposable? = null
@@ -35,20 +23,22 @@ class ApiLiveData(private val user: User) : LiveData<Resource<Boolean>>() {
                     postValue(Resource.loading(true))
                 }
                 .map {
-                    print(">>>>$user")
+                    println(">>>>>>$user")
                     true
                 }
+                .doFinally { postValue(Resource.loading(false)) }
                 .subscribeOn(Schedulers.io())
                 .subscribe({ response ->
                     postValue(Resource.success(response))
                 }, {
-                    postValue(Resource.error("error", false))
+                    postValue(Resource.error())
                 })
 
     }
 
     override fun onInactive() {
-        if (disposable != null)
+        if (disposable != null){
             disposable!!.dispose()
+        }
     }
 }
