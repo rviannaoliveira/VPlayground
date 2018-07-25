@@ -1,6 +1,6 @@
-package com.rviannaoliveira.vformmvvm.core
+package com.rviannaoliveira.vformmvvm.util
 
-import com.rviannaoliveira.vformmvvm.core.Status.*
+import com.rviannaoliveira.vformmvvm.util.Status.*
 
 
 /**
@@ -34,6 +34,6 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
 enum class Status {
     SUCCESS,
     LOADING,
-    ERROR,
+    ERROR
 }
 

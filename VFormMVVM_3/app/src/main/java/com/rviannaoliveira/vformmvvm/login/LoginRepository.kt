@@ -1,7 +1,7 @@
 package com.rviannaoliveira.vformmvvm.login
 
 import android.arch.lifecycle.LiveData
-import com.rviannaoliveira.vformmvvm.core.Resource
+import com.rviannaoliveira.vformmvvm.util.Resource
 import com.rviannaoliveira.vformmvvm.model.User
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable

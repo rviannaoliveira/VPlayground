@@ -2,7 +2,7 @@ package com.rviannaoliveira.vformmvvm.login
 
 import android.arch.lifecycle.*
 import android.content.Context
-import com.rviannaoliveira.vformmvvm.core.Status
+import com.rviannaoliveira.vformmvvm.util.Status
 import com.rviannaoliveira.vformmvvm.model.LoginViewState
 import com.rviannaoliveira.vformmvvm.model.User
 
