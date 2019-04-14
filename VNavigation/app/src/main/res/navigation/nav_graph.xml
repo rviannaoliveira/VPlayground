@@ -36,4 +36,7 @@
                 app:argType="string"
                 android:defaultValue="End"/>
     </fragment>
+
+    <action android:id="@+id/action_global_destinationFragmentTwo"
+            app:destination="@id/destinationFragmentTwo"/>
 </navigation>

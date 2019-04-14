@@ -26,5 +26,11 @@ class DestinationFragmentOne : Fragment() {
                 bundle
             )
         )
+
+        view.findViewById<View>(R.id.button).setOnClickListener {
+            //Note : Action Global
+            Navigation.findNavController(it).navigate(R.id.action_global_destinationFragmentTwo)
+        }
+
     }
 }
