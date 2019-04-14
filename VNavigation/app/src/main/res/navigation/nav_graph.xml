@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/destinationFragmentOne">
+
+    <fragment android:id="@+id/destinationFragmentOne"
+              android:name="com.rviannaoliveira.vnavigation.DestinationFragmentOne"
+              android:label="DestinationFragmentOne">
+        <action android:id="@+id/action_destinationFragmentOne_to_destinationFragmentTwo"
+                app:destination="@id/destinationFragmentTwo"/>
+
+        <action android:id="@+id/action_destinationFragmentOne_to_destinationFragmentTree"
+                app:destination="@id/destinationFragmentTree"/>
+    </fragment>
+
+    <fragment android:id="@+id/destinationFragmentTree"
+              android:name="com.rviannaoliveira.vnavigation.DestinationFragmentTree"
+              android:label="fragment_destination_tree" tools:layout="@layout/fragment_destination_tree">
+        <action android:id="@+id/action_destinationTreeFragment_to_destinationFragmentFour"
+                app:destination="@id/destinationFragmentFour"/>
+
+        <argument android:name="text" app:argType="string"/>
+    </fragment>
+
+    <fragment android:id="@+id/destinationFragmentTwo"
+              android:name="com.rviannaoliveira.vnavigation.DestinationFragmentTwo"
+              android:label="DestinationFragmentTwo"/>
+
+    <fragment android:id="@+id/destinationFragmentFour"
+              android:name="com.rviannaoliveira.vnavigation.DestinationFragmentFour"
+              android:label="DestinationFragmentFour">
+        <argument
+                android:name="buttonName"
+                app:argType="string"
+                android:defaultValue="End"/>
+    </fragment>
+</navigation>
