@@ -1,8 +1,9 @@
-# VPhysicsBasedAnimation presents...
+# VPhysicsBasedAnimation presents...Some example using Physics Based in Android
 
-Some example using Physics Based in Android
-<img src="https://github.com/rviannaoliveira/VPhysicsBasedAnimation/blob/master/images/main.png" width="210" height="340" margin="10xp">
-
+## Main Screen
+<p>
+    <img src="images/main.png" align="center" width=200>
+</p>
 
 ## Spring Animation
 ![alt text](https://media.giphy.com/media/hqZVeqJFYn2IU6rICI/giphy.gif "Spring animation")
