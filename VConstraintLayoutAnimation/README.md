@@ -2,12 +2,9 @@
 
 Using MotionLayout and ConstraintSet
 
-## Scene 1
 
-![alt text] (https://media.giphy.com/media/SXCEFgRv8zc5eJ4An1/giphy.gif)
+## Scene 1
+![alt text](https://media.giphy.com/media/MC9BYhXq9NS6u8WR3Y/giphy.gif "Scene 1")
 
 ## Scene 2
-
-<p style="text-align:center">
-    <img src="https://media.giphy.com/media/jRvlBhTL6YRAF8lQ6O/giphy.gif"  style="transform:rotate(270deg)">
-</p>
+![alt text](https://media.giphy.com/media/h4TXL93372iK0BPfon/giphy.gif "Scene 2")
