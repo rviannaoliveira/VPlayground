@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">VPhysicsBasedAnimation</string>
+    <string name="ratio">Ratio</string>
+    <string name="stiffness">Stiffness</string>
+    <string name="drag_me">drag me</string>
+    <string name="go">Go</string>
+    <string name="action">action</string>
+    <string name="left">left</string>
+    <string name="right">right</string>
+    <string name="down">Down</string>
+    <string name="up">Up</string>
+    <string name="clear">clear</string>
+    <string name="simple_spring">Simple Spring</string>
+    <string name="drag_and_back">Drag and Back</string>
+    <string name="fling">Fling</string>
+    <string name="rotate">Rotate</string>
+    <string name="chain">Chain</string>
+</resources>

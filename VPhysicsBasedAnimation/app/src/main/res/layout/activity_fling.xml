@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:id="@+id/container">
+
+    <TextView
+            android:id="@+id/drag"
+            android:layout_width="@dimen/drag_circle_size"
+            android:layout_height="@dimen/drag_circle_size"
+            android:background="@color/colorAccent"
+            android:padding="8dp"
+            android:text="@string/drag_me"
+            android:textAllCaps="true"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
