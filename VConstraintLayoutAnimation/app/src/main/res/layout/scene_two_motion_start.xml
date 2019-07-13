@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.motion.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                xmlns:tools="http://schemas.android.com/tools"
+                                                android:id="@+id/motionLayout"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                app:layoutDescription="@xml/scene_two"
+                                                tools:showPaths="true"
+                                                android:background="@drawable/cloud">
+
+
+    <ImageView
+            android:id="@+id/vegeta"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/vegeta_big_bang"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ki"
+            android:background="@drawable/big_bang"
+            android:layout_width="80dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintCircle="@+id/vegeta"
+            app:layout_constraintCircleAngle="100"
+            app:layout_constraintCircleRadius="80dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <ImageView
+            android:id="@+id/frieza"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/frieza"
+            android:layout_marginTop="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Morraaaaa verme!!!!!!!"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="#181818"
+            android:gravity="center"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+</android.support.constraint.motion.MotionLayout>

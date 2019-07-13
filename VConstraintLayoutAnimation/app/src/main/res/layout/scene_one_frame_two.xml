@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/constraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SceneOne">
+
+    <ImageView
+            android:id="@+id/backgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints"/>
+
+    <ImageView
+            android:id="@+id/backgroundImageSSB"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/description"
+            app:layout_constraintTop_toBottomOf="@+id/title"/>
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="@+id/title"
+            app:layout_constraintTop_toTopOf="@+id/title"
+            app:layout_constraintBottom_toBottomOf="@+id/title"/>
+
+    <View
+        android:id="@+id/fadeBackgroudView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@drawable/gradient"
+        app:layout_constraintBottom_toTopOf="@+id/description" />
+
+    <TextView
+        android:id="@+id/description1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ki1"
+            android:layout_width="@dimen/ki"
+            android:layout_height="@dimen/ki"
+            android:src="@drawable/luz"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="parent"/>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ki2"
+            android:layout_width="@dimen/ki"
+            android:layout_height="@dimen/ki"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toEndOf="@+id/ki1"
+            app:layout_constraintBottom_toTopOf="parent"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ki3"
+            android:layout_width="@dimen/ki"
+            android:layout_height="@dimen/ki"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintStart_toEndOf="@+id/ki2"
+            app:layout_constraintBottom_toTopOf="parent"/>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ki4"
+            android:layout_width="@dimen/ki"
+            android:layout_height="@dimen/ki"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="80dp"
+            app:layout_constraintStart_toEndOf="@+id/ki3"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+</android.support.constraint.ConstraintLayout>
