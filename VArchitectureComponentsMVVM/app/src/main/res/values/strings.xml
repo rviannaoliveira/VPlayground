@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">VArchitectureComponentsMVVM</string>
+    <string name="yes_hero">Sou um heroi</string>
+    <string name="no_hero">Eu não sou um heroi</string>
+    <string name="error">Aconteceu algum erro!!</string>
+    <string name="ok">Deu Certo</string>
+    <string name="testing">Eu sou um heroi!!!!!!</string>
+</resources>
