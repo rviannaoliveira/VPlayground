@@ -1,1 +1,3 @@
+include ':shared'
+include ':networking'
 include ':app'

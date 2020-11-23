@@ -1,21 +1,23 @@
 package com.rviannaoliveira.varchitecturecomponentsmvvm.home.data
 
-import android.app.Application
+import br.com.uol.ps.pagvendas.coreshared.networking.toResult
+import com.rviannaoliveira.varchitecturecomponentsmvvm.home.data.model.toCharacter
 import com.rviannaoliveira.varchitecturecomponentsmvvm.home.data.service.MainService
-import com.rviannaoliveira.varchitecturecomponentsmvvm.home.model.Character
-import io.reactivex.Single
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+import com.rviannaoliveira.varchitecturecomponentsmvvm.home.domain.CharacterHero
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 interface MainRepository {
-    fun getCharacter(): Single<Character>
+    suspend fun getCharacter(): Result<CharacterHero>
 }
 
-class MainRepositoryImpl @Inject constructor(private val service: MainService) : MainRepository {
- @Inject
- lateinit var application: Application
-    override fun getCharacter(): Single<Character> =
-        service.getCharacter().map {
+class MainRepositoryImpl(private val service: MainService) : MainRepository {
+
+    override suspend fun getCharacter(): Result<CharacterHero> =
+        service.getCharacter().toResult().map {
+            throw Exception()
             it.toCharacter()
-        }.delay(3,TimeUnit.SECONDS)
+        }
 }
+

@@ -2,11 +2,11 @@ package com.rviannaoliveira.varchitecturecomponentsmvvm.home.presentation
 
 import android.content.res.Resources
 import com.rviannaoliveira.varchitecturecomponentsmvvm.R
-import com.rviannaoliveira.varchitecturecomponentsmvvm.home.model.Character
+import com.rviannaoliveira.varchitecturecomponentsmvvm.home.domain.CharacterHero
 
 data class MainUiModel(
     private val resources: Resources,
-    private val character: Character
+    private val character: CharacterHero
 ) {
     val name = character.name
     val description = character.description

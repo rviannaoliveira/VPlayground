@@ -4,9 +4,8 @@ import android.content.res.Resources
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.rviannaoliveira.varchitecturecomponentsmvvm.home.data.MainRepository
-import com.rviannaoliveira.varchitecturecomponentsmvvm.home.model.Character
+import com.rviannaoliveira.varchitecturecomponentsmvvm.home.data.model.CharacterHero
 import com.rviannaoliveira.varchitecturecomponentsmvvm.home.presentation.MainState
-import com.rviannaoliveira.varchitecturecomponentsmvvm.home.presentation.MainViewModel
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.junit.Rule
@@ -29,7 +28,7 @@ class MainViewModelTest{
     @Mock
     private lateinit var repository : MainRepository
     @Mock
-    private lateinit var character : Character
+    private lateinit var character : CharacterHero
     @Mock
     private lateinit var stateObserver: Observer<MainState>
 

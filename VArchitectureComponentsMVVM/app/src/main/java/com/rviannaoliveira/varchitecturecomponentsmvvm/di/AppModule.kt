@@ -1,29 +1,24 @@
 package com.rviannaoliveira.varchitecturecomponentsmvvm.di
 
-import android.app.Application
 import android.content.res.Resources
-import dagger.Module
-import dagger.Provides
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import javax.inject.Named
-import javax.inject.Singleton
+import com.rviannaoliveira.network.di.NetworkModule
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import org.koin.android.ext.koin.androidApplication
+import org.koin.core.qualifier.Qualifier
+import org.koin.core.qualifier.QualifierValue
+import org.koin.dsl.module
 
-@Module
-class AppModule {
+object AppModule {
+    private val instance = module {
+        single<Resources> { androidApplication().resources }
+        single(IOScheduler) { Dispatchers.IO }
+    }
 
-    @Provides
-    @Singleton
-    fun provideResources(application : Application): Resources = application.resources
+    object IOScheduler : Qualifier {
+        override val value: QualifierValue
+            get() = "IOScheduler"
+    }
 
-    @Provides
-    @Singleton
-    @Named("IOScheduler")
-    fun provideIOScheduler(): Scheduler = Schedulers.io()
-
-    @Provides
-    @Singleton
-    @Named("MainScheduler")
-    fun provideMainScheduler(): Scheduler = AndroidSchedulers.mainThread()
+    val modules = listOf(instance, NetworkModule.instance)
 }

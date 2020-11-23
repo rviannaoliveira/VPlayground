@@ -2,12 +2,16 @@ package com.rviannaoliveira.varchitecturecomponentsmvvm.home.presentation
 
 import android.content.res.Resources
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.rviannaoliveira.varchitecturecomponentsmvvm.home.data.MainRepository
-import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Inject
-import javax.inject.Named
+import androidx.lifecycle.viewModelScope
+import com.rviannaoliveira.shared.base.BaseViewModel
+import com.rviannaoliveira.varchitecturecomponentsmvvm.home.domain.CharacterHero
+import com.rviannaoliveira.varchitecturecomponentsmvvm.home.domain.MainUsecase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 sealed class MainState(val isLoading: Boolean) {
     object Success : MainState(isLoading = false)
@@ -16,44 +20,40 @@ sealed class MainState(val isLoading: Boolean) {
     object ShowSomething : MainState(isLoading = false)
 }
 
-class MainViewModel @Inject constructor(
-    private val repository: MainRepository,
+class MainViewModel(
+    private val interactor: MainUsecase,
     private val resources: Resources,
-    @Named("IOScheduler") private val ioScheduler: Scheduler,
-    @Named("MainScheduler") private val mainScheduler: Scheduler
-) : ViewModel() {
-
-    private val disposable = CompositeDisposable()
+    private val dispatcherIO: CoroutineDispatcher
+) : BaseViewModel() {
     val state = MutableLiveData<MainState>()
     val uiModel = MutableLiveData<MainUiModel>()
 
-    init {
-        loadCharacter()
+    override fun onResume() {
+        super.onResume()
+        viewModelScope.launch(dispatcherIO) {
+            interactor.getCharacter()
+                .onFailure { error ->
+                    println(">>>>ERRO CARALHO ${error.message}")
+                    state.postValue(MainState.Error)
+                    error.printStackTrace()
+                }.onSuccess {
+                    state.postValue(MainState.Success)
+                    uiModel.postValue(
+                        MainUiModel(
+                            resources = resources,
+                            character = it
+                        )
+                    )
+                }
+        }
     }
 
-    private fun loadCharacter() {
-        disposable.add(repository.getCharacter()
-            .subscribeOn(ioScheduler)
-            .observeOn(mainScheduler)
-            .doOnSubscribe { state.value = MainState.LoadingState }
-            .subscribe({ character ->
-                state.value = MainState.Success
-                uiModel.value = MainUiModel(
-                    resources = resources,
-                    character = character
-                )
-            }, {
-                state.value = MainState.Error
-            })
-        )
-    }
-
-    fun showSomething(){
+    fun showSomething() {
         state.value = MainState.ShowSomething
     }
 
     override fun onCleared() {
-        disposable.clear()
+        viewModelScope.cancel()
         super.onCleared()
     }
 }

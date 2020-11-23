@@ -1,7 +1,7 @@
 package com.rviannaoliveira.varchitecturecomponentsmvvm
 
 import android.content.res.Resources
-import com.rviannaoliveira.varchitecturecomponentsmvvm.home.model.Character
+import com.rviannaoliveira.varchitecturecomponentsmvvm.home.data.model.CharacterHero
 import com.rviannaoliveira.varchitecturecomponentsmvvm.home.presentation.MainUiModel
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -18,7 +18,7 @@ class MainUiModelTest{
     @Mock
     private lateinit var resources : Resources
     @Mock
-    private lateinit var character : Character
+    private lateinit var character : CharacterHero
 
     @Before
     fun setUp(){
