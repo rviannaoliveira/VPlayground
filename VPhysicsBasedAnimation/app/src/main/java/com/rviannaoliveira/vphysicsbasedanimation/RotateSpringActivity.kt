@@ -1,11 +1,10 @@
 package com.rviannaoliveira.vphysicsbasedanimation
 
 import android.os.Bundle
-import android.support.animation.DynamicAnimation
-import android.support.animation.SpringAnimation
-import android.support.animation.SpringForce
-import android.support.v7.app.AppCompatActivity
-import com.rviannaoliveira.vphysicsbasedanimationandroid.onUpdate
+import androidx.appcompat.app.AppCompatActivity
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import kotlinx.android.synthetic.main.activity_rotate.*
 
 
@@ -23,7 +22,7 @@ class RotateSpringActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rotate)
 
-        firstRotationAnimation.onUpdate {
+        firstRotationAnimation.addUpdateListener { _, _, _ ->
             secondRotationAnimation.run {
                 spring = springForce
                 setStartValue(600f)

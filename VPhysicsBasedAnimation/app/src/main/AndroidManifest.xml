@@ -21,6 +21,7 @@
         <activity android:name=".FlingActivity"/>
         <activity android:name=".RotateSpringActivity"/>
         <activity android:name=".SimpleSpringActivity"/>
+        <activity android:name=".CleanSpringActivity" />
     </application>
 
 </manifest>

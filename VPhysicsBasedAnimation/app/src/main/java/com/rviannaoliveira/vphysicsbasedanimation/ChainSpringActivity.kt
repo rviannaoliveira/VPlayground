@@ -1,12 +1,12 @@
 package com.rviannaoliveira.vphysicsbasedanimation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.animation.DynamicAnimation
-import android.support.animation.SpringAnimation
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.ViewGroup
-import com.rviannaoliveira.vphysicsbasedanimationandroid.onUpdate
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
 import kotlinx.android.synthetic.main.activity_chain.*
 
 class ChainSpringActivity : AppCompatActivity() {
@@ -25,17 +25,18 @@ class ChainSpringActivity : AppCompatActivity() {
         setupAnimation()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupAnimation() {
         val firstLayoutParams = first.layoutParams as ViewGroup.MarginLayoutParams
         val secondLayoutParams = second.layoutParams as ViewGroup.MarginLayoutParams
 
-        firstXAnim.onUpdate { value ->
+        firstXAnim.addUpdateListener { _, value, _ ->
             secondXAnim.animateToFinalPosition(
                 value + ((first.width -
                         second.width) / 2)
             )
         }
-        firstYAnim.onUpdate { value ->
+        firstYAnim.addUpdateListener { _, value, _ ->
             secondYAnim.animateToFinalPosition(
                 value + first.height +
                         secondLayoutParams.topMargin

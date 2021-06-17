@@ -38,5 +38,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/chain"/>
+    <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/action_clean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clean"/>
 
 </LinearLayout>

@@ -2,7 +2,7 @@ package com.rviannaoliveira.vphysicsbasedanimation
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(){
@@ -30,5 +30,9 @@ class MainActivity : AppCompatActivity(){
         action_chain.setOnClickListener {
             startActivity(Intent(this, ChainSpringActivity::class.java))
         }
+        action_clean.setOnClickListener {
+            startActivity(Intent(this, CleanSpringActivity::class.java))
+        }
+
     }
 }

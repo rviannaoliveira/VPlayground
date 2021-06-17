@@ -1,10 +1,10 @@
 package com.rviannaoliveira.vphysicsbasedanimation
 
 import android.os.Bundle
-import android.support.animation.DynamicAnimation
-import android.support.animation.SpringAnimation
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.ViewGroup
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
 import kotlinx.android.synthetic.main.activity_chain.first
 import kotlinx.android.synthetic.main.activity_chain.second
 import kotlinx.android.synthetic.main.activity_simple.*
@@ -19,7 +19,7 @@ class SimpleSpringActivity : AppCompatActivity() {
     private var leftRightValue: Float = 0f
     private var originalAbsX : Float = 0f
     private var originalAbsY : Float = 0f
-    private val MOVE = 50f
+    private val MOVE = 100f
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

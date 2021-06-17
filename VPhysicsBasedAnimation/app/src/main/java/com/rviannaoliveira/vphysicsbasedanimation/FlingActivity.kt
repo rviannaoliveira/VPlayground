@@ -1,16 +1,17 @@
 package com.rviannaoliveira.vphysicsbasedanimation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.animation.DynamicAnimation
-import android.support.animation.FlingAnimation
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
-import com.rviannaoliveira.vphysicsbasedanimationandroid.afterMeasured
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.FlingAnimation
 import kotlinx.android.synthetic.main.activity_chain.drag
 import kotlinx.android.synthetic.main.activity_fling.*
 import kotlinx.android.synthetic.main.activity_fling.view.*
 
+@SuppressLint("ClickableViewAccessibility")
 class FlingActivity : AppCompatActivity() {
     private val flingAnimationX: FlingAnimation by lazy { FlingAnimation(drag, DynamicAnimation.X) }
     private val flingAnimationY: FlingAnimation by lazy { FlingAnimation(drag, DynamicAnimation.Y) }
